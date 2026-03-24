@@ -1,0 +1,9 @@
+# Build artifacts
+airgap-bundle-*.tar.gz
+airgap-bundle-*/
+
+# Test artifacts
+.test-integration/
+
+# Devbox
+.devbox
