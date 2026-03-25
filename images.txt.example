@@ -15,3 +15,30 @@ redis:7-alpine
 # Kubernetes components (example)
 # kubernetes/kubernetes-dashboard:v2.7.0
 # kubernetes/metrics-server:v0.6.3
+
+# Plugins
+
+# Webtop Chrome Browser - lscr.io/linuxserver/chrome:latest
+# Terminal Workload - wettyoss/wetty:latest
+
+# Helios Containerized Workstations:
+
+# docker.io/junoinnovations/helios-ai:unstable-sid
+# docker.io/junoinnovations/helios-ai:unstable-kali
+# docker.io/junoinnovations/helios-ai:unstable-alma-9
+# docker.io/junoinnovations/helios-ai:unstable-noble
+# docker.io/junoinnovations/helios-ai:unstable-bookworm
+# docker.io/junoinnovations/helios-ai:unstable-rocky-9
+# docker.io/junoinnovations/helios-ai:unstable-jammy
+# docker.io/junoinnovations/helios-ai:unstable-alpine-3
+
+# docker.io/junoinnovations/helios-vfx:unstable-sid
+# docker.io/junoinnovations/helios-vfx:unstable-kali
+# docker.io/junoinnovations/helios-vfx:unstable-alma-9
+# docker.io/junoinnovations/helios-vfx:unstable-noble
+# docker.io/junoinnovations/helios-vfx:unstable-bookworm
+# docker.io/junoinnovations/helios-vfx:unstable-rocky-9
+# docker.io/junoinnovations/helios-vfx:unstable-jammy
+# docker.io/junoinnovations/helios-vfx:unstable-alpine-3
+
+
