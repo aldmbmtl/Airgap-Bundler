@@ -99,12 +99,6 @@ done
 
 echo "=== Step 2: Pulling and saving registry images ==="
 for image in "${REGISTRY_IMAGES[@]}"; do
-    echo "Validating ${image}..."
-    if ! docker manifest inspect "${image}" > /dev/null 2>&1; then
-        echo "ERROR: Image ${image} not found or inaccessible"
-        exit 1
-    fi
-    
     echo "Pulling ${image}..."
     docker pull "${image}"
     
@@ -190,14 +184,28 @@ done
 echo "Git server is ready"
 
 echo ""
+echo "=== Waiting for registry to be ready ==="
+max_retries=30
+retry_count=0
+while ! curl -s "http://\${REGISTRY_URL}/v2/" > /dev/null 2>&1; do
+    sleep 1
+    retry_count=\$((retry_count + 1))
+    if [ \${retry_count} -ge \${max_retries} ]; then
+        echo "ERROR: Registry failed to start after \${max_retries} seconds"
+        exit 1
+    fi
+done
+echo "Registry is ready"
+echo ""
+
 echo "=== Loading images into local registry ==="
 for tar_file in "\${REGISTRY_IMAGES_DIR}"/*.tar; do
     if [ -f "\${tar_file}" ]; then
         echo "Loading \$(basename "\${tar_file}")..."
-        docker load -i "\${tar_file}"
+        LOAD_OUTPUT=\$(docker load -i "\${tar_file}")
+        echo "\${LOAD_OUTPUT}"
         
-        image_name=\$(basename "\${tar_file}" .tar)
-        image_name_clean=\$(echo "\${image_name}" | tr '-' ':' | sed 's/_/\//')
+        image_name_clean=\$(echo "\${LOAD_OUTPUT}" | sed 's/Loaded image: //')
         
         echo "Tagging for registry: \${REGISTRY_URL}/\${image_name_clean}"
         docker tag "\${image_name_clean}" "\${REGISTRY_URL}/\${image_name_clean}"

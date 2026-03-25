@@ -22,17 +22,7 @@ Airgap-Bundler packages Docker images and Git repositories into a tar.gz archive
 
 ## Quick Start
 
-1. Create an `images.txt` file with the images you want to include in the registry:
-   ```bash
-   # Create images.txt with your desired images
-   cat > images.txt << 'EOF'
-   nginx:latest
-   postgres:15
-   redis:7-alpine
-   EOF
-   ```
-
-2. Build the bundle:
+1. Build the bundle:
    ```bash
    # Build the bundle (uses default localhost:5000 for registry)
    ./build-bundle.sh
@@ -43,7 +33,7 @@ Airgap-Bundler packages Docker images and Git repositories into a tar.gz archive
 
 This creates `airgap-bundle.tar.gz` in the current directory.
 
-> **Note**: The `images.txt` file is required. See [Registry Images (images.txt)](#registry-images-images-txt) for more details.
+> **Note**: The bundle includes a preset `images.txt` with default registry images. See [Registry Images (images.txt)](#registry-images-images-txt) to customize.
 
 ## Configuration
 
@@ -65,7 +55,7 @@ Example:
 
 ### Registry Images (images.txt)
 
-Create an `images.txt` file in the same directory as `build-bundle.sh` to include custom images in the local Docker registry.
+The `images.txt` file is included with preset images. Edit it to customize which images are included in the local Docker registry.
 
 **Format:**
 - One image per line in `image:tag` format
@@ -79,8 +69,6 @@ nginx:latest
 postgres:15
 redis:7-alpine
 ```
-
-See `images.txt.example` for more examples.
 
 ### Git Repositories
 

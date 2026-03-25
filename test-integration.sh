@@ -5,8 +5,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEST_DIR="${SCRIPT_DIR}/.test-integration"
 BUNDLE_PATTERN="airgap-bundle*.tar.gz"
 BUNDLE_DIR=""
-IMAGES_FILE="images.txt"
-IMAGES_FILE_BACKUP=""
 
 cleanup() {
     local exit_code=$?
@@ -20,10 +18,6 @@ cleanup() {
         fi
     fi
     
-    if [ -n "${IMAGES_FILE_BACKUP:-}" ] && [ -f "${IMAGES_FILE_BACKUP}" ]; then
-        mv "${IMAGES_FILE_BACKUP}" "${SCRIPT_DIR}/${IMAGES_FILE}"
-    fi
-    
     rm -rf "${TEST_DIR}"
     rm -f "${BUNDLE_PATTERN}"
     
@@ -34,21 +28,6 @@ cleanup() {
 trap cleanup EXIT
 
 echo "=== Integration Test Suite ==="
-echo ""
-
-echo "=== Step 0: Setup test images.txt ==="
-if [ -f "${SCRIPT_DIR}/${IMAGES_FILE}" ]; then
-    IMAGES_FILE_BACKUP="${SCRIPT_DIR}/${IMAGES_FILE}.test-backup"
-    mv "${SCRIPT_DIR}/${IMAGES_FILE}" "${IMAGES_FILE_BACKUP}"
-fi
-
-cat > "${SCRIPT_DIR}/${IMAGES_FILE}" << 'EOF'
-alpine:latest
-busybox:latest
-EOF
-
-echo "Created test images.txt with:"
-cat "${SCRIPT_DIR}/${IMAGES_FILE}"
 echo ""
 
 echo "=== Step 1: Build the bundle ==="
@@ -128,17 +107,17 @@ echo "Checking registry catalog..."
 REGISTRY_CATALOG=$(curl -s http://localhost:5000/v2/_catalog)
 echo "Registry catalog: ${REGISTRY_CATALOG}"
 
-if echo "${REGISTRY_CATALOG}" | grep -q "alpine"; then
-    echo "Registry images (alpine): PASS"
+if echo "${REGISTRY_CATALOG}" | grep -q "chrome"; then
+    echo "Registry images (chrome): PASS"
 else
-    echo "Registry images (alpine): FAIL - alpine not found in registry"
+    echo "Registry images (chrome): FAIL - chrome not found in registry"
     exit 1
 fi
 
-if echo "${REGISTRY_CATALOG}" | grep -q "busybox"; then
-    echo "Registry images (busybox): PASS"
+if echo "${REGISTRY_CATALOG}" | grep -q "helios-ai"; then
+    echo "Registry images (helios-ai): PASS"
 else
-    echo "Registry images (busybox): FAIL - busybox not found in registry"
+    echo "Registry images (helios-ai): FAIL - helios-ai not found in registry"
     exit 1
 fi
 
