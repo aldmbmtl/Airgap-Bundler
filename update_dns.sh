@@ -107,11 +107,11 @@ ${KUBECTL_CMD} patch application genesis -n argocd \
     --patch "[{\"op\": \"replace\", \"path\": \"/spec/sources/0/helm/parameters/0/value\", \"value\": \"${NEW_NEXTAUTH_URL}\"}]"
 
 TEMP_FILE=$(mktemp)
-max_retries=3
+max_retries=15
 retry_count=0
 while [[ ${retry_count} -lt ${max_retries} ]]; do
     ${KUBECTL_CMD} get application genesis -n argocd -o yaml > "${TEMP_FILE}"
-    sed -i "s|^[[:space:]]*host:.*|host: ${NEW_HOST}|" "${TEMP_FILE}"
+    sed -i "s|^  host:.*|  host: ${NEW_HOST}|" "${TEMP_FILE}"
     if ${KUBECTL_CMD} apply -f "${TEMP_FILE}" --server-side --field-manager kubectl --force-conflicts 2>/dev/null; then
         break
     fi
