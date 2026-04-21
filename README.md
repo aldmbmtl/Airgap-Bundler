@@ -1,4 +1,4 @@
-# Juno Airgap Installer
+# Airgap Installer
 
 Packages K3s and Juno into a self-contained bundle for deployment on machines with no internet access. The bundle includes all container images, Helm charts, Git repositories, and an Ansible-based installer — everything needed to bring up a fully operational Juno cluster offline.
 
@@ -6,8 +6,8 @@ Packages K3s and Juno into a self-contained bundle for deployment on machines wi
 
 ```bash
 # On build machine (internet required)
-git clone https://github.com/juno-fx/Juno-Airgap-Bundler.git
-cd Juno-Airgap-Bundler
+git clone https://github.com/juno-fx/Airgap-Bundler.git
+cd Airgap-Bundler
 make build
 
 # Transfer to target
@@ -50,8 +50,8 @@ sudo ./install.sh \
 ## Build the Bundle
 
 ```bash
-git clone https://github.com/juno-fx/Juno-Airgap-Bundler.git
-cd Juno-Airgap-Bundler
+git clone https://github.com/juno-fx/Airgap-Bundler.git
+cd Airgap-Bundler
 
 # 1. Configure versions (see Configuration section below)
 # 2. Add/remove images (see Configuration section below)
@@ -72,7 +72,7 @@ GENESIS_VERSION="3.0.2"
 ORION_VERSION="3.1.0"
 ```
 
-### Images
+### Container Images
 
 Edit `images.txt` before building. One Docker image reference per line:
 
