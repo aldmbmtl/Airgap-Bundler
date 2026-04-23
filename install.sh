@@ -108,6 +108,42 @@ if [ -z "$PUBLIC_IP" ]; then
     exit 1
 fi
 GIT_SERVER_IP="$PUBLIC_IP"
+SERVICES_STARTED=0
+
+print_connection_info() {
+    if [ "$SERVICES_STARTED" -eq 0 ]; then
+        return
+    fi
+    cat << EOF > /dev/tty
+
+================================================
+  Juno Connection Information
+================================================
+
+Git Repositories:
+
+  Genesis-Deployment (v__GENESIS_VERSION__)
+  http://${GIT_SERVER_IP}:8080/git/Genesis-Deployment.git
+
+  Orion-Deployment (v__ORION_VERSION__)
+  http://${GIT_SERVER_IP}:8080/git/Orion-Deployment.git
+
+  Terra-Official-Plugins (__TERRA_VERSION__)
+  http://${GIT_SERVER_IP}:8080/git/Terra-Official-Plugins.git
+
+Helm Repository:
+
+  ingress-nginx (__INGRESS_NGINX_VERSION__)
+  http://${GIT_SERVER_IP}:8081
+
+  gpu-operator (__GPU_OPERATOR_VERSION__)
+  http://${GIT_SERVER_IP}:8081
+
+================================================
+EOF
+}
+
+trap print_connection_info EXIT
 
 # Prompt helpers - MUST run before redirecting logs to avoid leaking secrets.
 # Reads are taken from /dev/tty so they are not captured by the tee log redirect.
@@ -191,6 +227,7 @@ fi
 
 echo "[services] starting git server + helm repo"
 docker compose up -d
+SERVICES_STARTED=1
 
 echo "[k3s] extracting juno-oneclick"
 if [ ! -f "${ONECLICK_ARCHIVE}" ]; then
@@ -275,31 +312,3 @@ if [ $ANSIBLE_RESULT -ne 0 ]; then
 fi
 
 echo "Installation complete. Check status: sudo k3s kubectl get pods -A"
-
-cat << EOF
-
-================================================
-  Juno Connection Information
-================================================
-
-Git Repositories:
-
-  Genesis-Deployment (v__GENESIS_VERSION__)
-  http://${GIT_SERVER_IP}:8080/git/Genesis-Deployment.git
-
-  Orion-Deployment (v__ORION_VERSION__)
-  http://${GIT_SERVER_IP}:8080/git/Orion-Deployment.git
-
-  Terra-Official-Plugins (__TERRA_VERSION__)
-  http://${GIT_SERVER_IP}:8080/git/Terra-Official-Plugins.git
-
-Helm Repository:
-
-  ingress-nginx (__INGRESS_NGINX_VERSION__)
-  http://${GIT_SERVER_IP}:8081
-
-  gpu-operator (__GPU_OPERATOR_VERSION__)
-  http://${GIT_SERVER_IP}:8081
-
-================================================
-EOF
