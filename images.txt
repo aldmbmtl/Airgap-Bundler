@@ -1,15 +1,15 @@
 # === Juno Core (genesis 3.0.2 / orion 3.1.1) ===
 
 # Genesis management
-docker.io/junoinnovations/genesis:v5.2.1
+docker.io/junoinnovations/genesis:v6.0.0
 docker.io/junoinnovations/titan:v2.1.2
-docker.io/junoinnovations/terra:v2.1.1
+docker.io/junoinnovations/terra:v3.0.0
 docker.io/junoinnovations/rhea:v1.2.3
 docker.io/junoinnovations/metrics-gatherer:v0.0.4
 
 # Orion deployments
 docker.io/junoinnovations/kuiper:v4.2.0
-docker.io/junoinnovations/hubble:v6.1.0
+docker.io/junoinnovations/hubble:v6.1.1
 
 # === ArgoCD (from docs) ===
 
